@@ -1,4 +1,6 @@
 ﻿using DAL.DB;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,40 +10,42 @@ using System.Threading.Tasks;
 
 namespace DAL.Infastructure
 {
-    public class OperationRepository : IRepository<OperationsType>
+    public class OperationRepository 
     {
         private readonly DataBaseContext _dbContext;
         public OperationRepository(DataBaseContext context)
         {
             _dbContext = context;
-        } 
+        }
+        
+        public async Task Add(OperationsType entity)
+        {
+            await _dbContext.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+        }
 
-        public void Add(OperationsType entity)
+        public async Task AddRange(IEnumerable<OperationsType> entities)
+        {
+            await _dbContext.AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public Task Delete(OperationsType entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(OperationsType entity)
+        public Task<List<OperationsType>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public List<OperationsType> GetAll()
+        public Task<OperationsType> GetByID(Guid ID)
         {
             throw new NotImplementedException();
         }
 
-        public   Task<OperationsType> GetByID(Guid ID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(OperationsType entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        OperationsType IRepository<OperationsType>.GetByID(Guid ID)
+        public Task Update(OperationsType entity)
         {
             throw new NotImplementedException();
         }

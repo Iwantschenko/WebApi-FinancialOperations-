@@ -16,7 +16,12 @@ namespace DAL.DB.Configuration
             builder.HasKey(o => o.ID);
             builder
                 .HasMany(o => o.transactions)
-                .WithOne(t => t.OperationType);
+                .WithOne(t => t.OperationType); 
+
+            builder.HasData(
+                new OperationsType { ID = Guid.NewGuid(), Name = "income", Description = "Income operations" },
+                new OperationsType { ID = Guid.NewGuid(), Name = "expenses", Description = "Expenses operations" }
+            );
         }
     }
 }
