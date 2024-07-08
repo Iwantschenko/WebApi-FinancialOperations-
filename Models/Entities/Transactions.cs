@@ -14,6 +14,6 @@ namespace Models.Entities
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public Guid OperationTypeID {  get; set; }
-        public OperationsType? OperationType { get; set; }
+        public OperationType? OperationType { get; set; }
     }
 }

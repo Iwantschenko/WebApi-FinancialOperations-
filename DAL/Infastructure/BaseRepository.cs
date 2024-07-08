@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,50 +10,59 @@ namespace DAL.Infastructure
 {
     public abstract class BaseRepository<Entity> : IRepository<Entity> where Entity : class
     {
-        private readonly DataBaseContext _dbcontext;
-        public BaseRepository(DataBaseContext context) 
+        protected readonly DataBaseContext _dbContext;
+        public BaseRepository(DataBaseContext context)
         {
-            _dbcontext = context;
+            _dbContext = context;
         }
-
         public async Task Add(Entity entity)
         {
-            await _dbcontext.Set<Entity>().AddAsync(entity);
-            await _dbcontext.SaveChangesAsync();
+            await _dbContext.Set<Entity>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task AddRange(IEnumerable<Entity> entities)
         {
-            await _dbcontext.Set<Entity>().AddRangeAsync(entities);
-            await _dbcontext.SaveChangesAsync();
+            await _dbContext.Set<Entity>().AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task Delete(Guid ID)
+        public async Task Delete(Guid ID)
         {
-            throw new NotImplementedException();
+            var item = await _dbContext.Set<Entity>().FindAsync(ID);
+            if (item != null) 
+            {
+                _dbContext.Set<Entity>().Remove(item);
+            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<Entity>> GetAll()
         {
-            return await _dbcontext
+            return await _dbContext
                 .Set<Entity>()
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public Task<Entity> GetByID(Guid ID)
+        public async Task<Entity> GetByID(Guid ID)
         {
-            throw new NotImplementedException();
+            return  await _dbContext
+               .Set<Entity>()
+               .FindAsync(ID);
         }
 
-        public Task RemoveEntity(Entity entity)
+        public async Task RemoveEntity(Entity entity)
         {
-            throw new NotImplementedException();
+             _dbContext.Set<Entity>().Remove(entity);
+            await _dbContext .SaveChangesAsync();
         }
 
-        public Task Update(Entity entity)
+        public async Task Update(Entity entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
+        
     }
 }

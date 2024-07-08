@@ -7,7 +7,7 @@ namespace DAL.DB
 {
     public class DataBaseContext : DbContext
     {
-        public DbSet<OperationsType> operationTypes {  get; set; }
+        public DbSet<OperationType> operationTypes {  get; set; }
         public DbSet<Transactions> transactions { get; set; }
         public DataBaseContext(DbContextOptions<DataBaseContext> options ):base(options) 
         {

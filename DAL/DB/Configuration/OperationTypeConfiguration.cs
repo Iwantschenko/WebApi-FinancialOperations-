@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.DB.Configuration
 {
-    public class OperationTypeConfiguration : IEntityTypeConfiguration<OperationsType>
+    public class OperationTypeConfiguration : IEntityTypeConfiguration<OperationType>
     {
-        public void Configure(EntityTypeBuilder<OperationsType> builder)
+        public void Configure(EntityTypeBuilder<OperationType> builder)
         {
             builder.HasKey(o => o.ID);
             builder
@@ -19,8 +19,8 @@ namespace DAL.DB.Configuration
                 .WithOne(t => t.OperationType); 
 
             builder.HasData(
-                new OperationsType { ID = Guid.NewGuid(), Name = "income", Description = "Income operations" },
-                new OperationsType { ID = Guid.NewGuid(), Name = "expenses", Description = "Expenses operations" }
+                new OperationType { ID = Guid.NewGuid(), Name = "income", Description = "Income operations" },
+                new OperationType { ID = Guid.NewGuid(), Name = "expenses", Description = "Expenses operations" }
             );
         }
     }
