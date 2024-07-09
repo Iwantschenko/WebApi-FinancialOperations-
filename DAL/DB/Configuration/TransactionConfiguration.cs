@@ -10,9 +10,9 @@ using System.Transactions;
 using Models;
 namespace DAL.DB.Configuration
 {
-    public class TransactionConfiguration : IEntityTypeConfiguration<Models.Entities.Transactions>
+    public class TransactionConfiguration : IEntityTypeConfiguration<Models.Entities.TransactionsEntity>
     {
-        public void Configure(EntityTypeBuilder<Models.Entities.Transactions> builder)
+        public void Configure(EntityTypeBuilder<Models.Entities.TransactionsEntity> builder)
         {
             builder.
                 HasKey(t => t.Transaction_Id);

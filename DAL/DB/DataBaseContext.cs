@@ -7,8 +7,8 @@ namespace DAL.DB
 {
     public class DataBaseContext : DbContext
     {
-        public DbSet<OperationType> operationTypes {  get; set; }
-        public DbSet<Transactions> transactions { get; set; }
+        public DbSet<OperationTypeEntity> operationTypes {  get; set; }
+        public DbSet<TransactionsEntity> transactions { get; set; }
         public DataBaseContext(DbContextOptions<DataBaseContext> options ):base(options) 
         {
             Database.Migrate();

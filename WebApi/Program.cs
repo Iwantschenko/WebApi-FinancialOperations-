@@ -1,6 +1,8 @@
 
 using DAL.DB;
+using DAL.Infastructure;
 using Microsoft.EntityFrameworkCore;
+using Models.Entities;
 
 namespace WebApi
 {
@@ -18,9 +20,9 @@ namespace WebApi
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<DataBaseContext>(
-                options => options.UseSqlServer(configuration.GetConnectionString(nameof(DataBaseContext)))
-                ); 
-
+                options => options.UseSqlServer(configuration.GetConnectionString("DataBaseContext"))
+                );
+            builder.Services.AddScoped < IRepository<OperationTypeEntity> , BaseRepository<OperationTypeEntity>>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

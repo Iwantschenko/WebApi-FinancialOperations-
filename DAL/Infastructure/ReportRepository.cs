@@ -4,20 +4,20 @@ using Models.Entities;
 
 namespace DAL.Infastructure
 {
-    public class TransactionRepository :  BaseRepository<Transactions>
+    public class ReportRepository :  BaseRepository<TransactionsEntity>
     {
-        public TransactionRepository(DataBaseContext dbContext ) : base(dbContext) 
+        public ReportRepository(DataBaseContext dbContext ) : base(dbContext) 
         {
             
         }
-        public async Task<List<Transactions>> GetByDate(DateTime findDate)
+        public async Task<List<TransactionsEntity>> GetByDate(DateTime findDate)
         {
             return await _dbContext.transactions
                 .AsNoTracking()
                 .Where(tr => tr.DateTime.Date  == findDate.Date)
                 .ToListAsync() ;
         }
-        public async Task<List<Transactions>> GetRangeDate(DateTime startDate , DateTime endDate)
+        public async Task<List<TransactionsEntity>> GetRangeDate(DateTime startDate , DateTime endDate)
         {
             return await _dbContext.transactions
                 .AsNoTracking() 

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    public class OperationType
+    public class OperationTypeEntity
     {
         [Key]
         public Guid ID { get; set; }
         public string Name { get; set; }    
         public bool IsIncome { get; set; }    
 
-        public ICollection<Transactions>? transactions { get; set; }
+        public ICollection<TransactionsEntity>? transactions { get; set; }
     }
 }
