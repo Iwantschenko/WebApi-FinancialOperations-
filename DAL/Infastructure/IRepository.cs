@@ -13,8 +13,8 @@ namespace DAL.Infastructure
         public Task<List<T>> GetAll();
         public Task Add(T entity);
         public Task AddRange(IEnumerable<T> entities);
-        public Task Update(T entity);
-        public Task RemoveEntity(T entity);
+        public void Update(T entity);
+        public void RemoveEntity(T entity);
         public Task Delete(Guid ID );
     }
 }

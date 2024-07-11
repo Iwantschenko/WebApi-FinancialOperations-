@@ -1,4 +1,5 @@
-﻿using DAL.DB.Configuration;
+﻿using Azure.Identity;
+using DAL.DB.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
@@ -20,6 +21,9 @@ namespace DAL.DB
 
             base.OnModelCreating(modelBuilder);
         }
-        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

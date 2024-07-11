@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Init_mig : Migration
+    public partial class CorrectConfiguration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +15,13 @@ namespace DAL.Migrations
                 name: "operationTypes",
                 columns: table => new
                 {
-                    Operation_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Operation_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Operation_Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsIncome = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_operationTypes", x => x.Operation_ID);
+                    table.PrimaryKey("PK_operationTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,7 +41,7 @@ namespace DAL.Migrations
                         name: "FK_transactions_operationTypes_OperationTypeID",
                         column: x => x.OperationTypeID,
                         principalTable: "operationTypes",
-                        principalColumn: "Operation_ID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 

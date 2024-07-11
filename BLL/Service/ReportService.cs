@@ -9,10 +9,10 @@ namespace BLL.Service
 {
     public  class ReportService 
     {
-        private readonly BaseService<TransactionsEntity> _transactionService;
-        private readonly BaseService<OperationTypeEntity> _operationService;
+        private readonly BaseService<TransactionsEntity , TransactionDto> _transactionService;
+        private readonly BaseService<OperationTypeEntity , OperationTypeDto> _operationService;
         private readonly ReportRepository _reportRepository;
-        public ReportService(ReportRepository reportRepository , BaseService<TransactionsEntity> transaction , BaseService<OperationTypeEntity> opeartion)
+        public ReportService(ReportRepository reportRepository , BaseService<TransactionsEntity,TransactionDto> transaction , BaseService<OperationTypeEntity ,OperationTypeDto> opeartion)
         {
             _reportRepository = reportRepository;
             _transactionService = transaction;

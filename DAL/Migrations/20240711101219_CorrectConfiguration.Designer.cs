@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20240703164720_Init_mig")]
-    partial class Init_mig
+    [Migration("20240711101219_CorrectConfiguration")]
+    partial class CorrectConfiguration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,36 +25,34 @@ namespace DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Models.Entities.OperationType", b =>
+            modelBuilder.Entity("Models.Entities.OperationTypeEntity", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Operation_ID");
+                        .HasColumnName("ID");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Operation_Description");
+                    b.Property<bool>("IsIncome")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Operation_Name");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("operationTypes");
+                    b.ToTable("operationTypes", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Entities.Transaction", b =>
+            modelBuilder.Entity("Models.Entities.TransactionsEntity", b =>
                 {
                     b.Property<Guid>("Transaction_Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Transaction_Id");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
@@ -70,12 +68,12 @@ namespace DAL.Migrations
 
                     b.HasIndex("OperationTypeID");
 
-                    b.ToTable("transactions");
+                    b.ToTable("transactions", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Entities.Transaction", b =>
+            modelBuilder.Entity("Models.Entities.TransactionsEntity", b =>
                 {
-                    b.HasOne("Models.Entities.OperationType", "OperationType")
+                    b.HasOne("Models.Entities.OperationTypeEntity", "OperationType")
                         .WithMany("transactions")
                         .HasForeignKey("OperationTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -84,7 +82,7 @@ namespace DAL.Migrations
                     b.Navigation("OperationType");
                 });
 
-            modelBuilder.Entity("Models.Entities.OperationType", b =>
+            modelBuilder.Entity("Models.Entities.OperationTypeEntity", b =>
                 {
                     b.Navigation("transactions");
                 });

@@ -4,11 +4,12 @@ using Models.Entities;
 
 namespace DAL.Infastructure
 {
-    public class ReportRepository :  BaseRepository<TransactionsEntity>
+    public class ReportRepository 
     {
-        public ReportRepository(DataBaseContext dbContext ) : base(dbContext) 
+        private readonly DataBaseContext _dbContext;
+        public ReportRepository(DataBaseContext dbContext ) 
         {
-            
+            _dbContext = dbContext;
         }
         public async Task<List<TransactionsEntity>> GetByDate(DateTime findDate)
         {

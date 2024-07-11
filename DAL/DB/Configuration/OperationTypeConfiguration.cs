@@ -14,14 +14,21 @@ namespace DAL.DB.Configuration
         public void Configure(EntityTypeBuilder<OperationTypeEntity> builder)
         {
             builder.HasKey(o => o.ID);
+            builder.Property(o => o.ID).HasColumnName("ID");
+            builder.Property(o => o.Name).IsRequired();
+            builder.Property(o => o.IsIncome).IsRequired();
+
             builder
                 .HasMany(o => o.transactions)
-                .WithOne(t => t.OperationType); 
+                .WithOne(t => t.OperationType);
+            builder.ToTable("operationTypes");
 
             builder.HasData(
-                new OperationTypeEntity { ID = Guid.NewGuid(), Name = "income", IsIncome = true },
-                new OperationTypeEntity { ID = Guid.NewGuid(), Name = "expenses", IsIncome = false }
+                new OperationTypeEntity { ID = InitialData.IncomeOperationTypeId, Name = "income", IsIncome = true },
+                new OperationTypeEntity { ID = InitialData.ExpensesOperationTypeId, Name = "expenses", IsIncome = false }
             );
+
+
         }
     }
 }

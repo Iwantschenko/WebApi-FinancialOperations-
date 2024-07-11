@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DAL.Infastructure
 {
-    public abstract class BaseRepository<Entity> : IRepository<Entity> where Entity : class
+    public  class BaseRepository<Entity> : IRepository<Entity> where Entity : class
     {
         protected readonly DataBaseContext _dbContext;
-        public BaseRepository(DataBaseContext context)
+        public BaseRepository(DataBaseContext dbContext) 
         {
-            _dbContext = context;
+            _dbContext = dbContext;
         }
         public async Task Add(Entity entity)
         {
@@ -52,16 +52,16 @@ namespace DAL.Infastructure
                .FindAsync(ID);
         }
 
-        public async Task RemoveEntity(Entity entity)
+        public void RemoveEntity(Entity entity)
         {
-             _dbContext.Set<Entity>().Remove(entity);
-            await _dbContext .SaveChangesAsync();
+            _dbContext.Set<Entity>().Remove(entity);
+            _dbContext .SaveChangesAsync();
         }
 
-        public async Task Update(Entity entity)
+        public void Update(Entity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChangesAsync();
         }
         
     }
