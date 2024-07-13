@@ -16,9 +16,8 @@ namespace WebApi
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
             // Add services to the container.
-            
+            #region DI 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -36,7 +35,7 @@ namespace WebApi
             builder.Services.AddScoped<BaseService<OperationTypeEntity , OperationTypeDto>>();
             builder.Services.AddScoped<BaseService<TransactionsEntity , TransactionDto>>();
             builder.Services.AddScoped<ReportService>();
-            
+            #endregion
 
             var app = builder.Build();
 
@@ -45,6 +44,7 @@ namespace WebApi
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                
             }
 
             app.UseHttpsRedirection();

@@ -9,24 +9,13 @@ using Microsoft.AspNetCore.StaticFiles;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class OperationController : Controller
+    [Route("api/[controller]")]
+    public class OperationsController : Controller
     {
         private readonly BaseService<OperationTypeEntity, OperationTypeDto> _operationService;
-        public OperationController(BaseService<OperationTypeEntity, OperationTypeDto> baseService)
+        public OperationsController(BaseService<OperationTypeEntity, OperationTypeDto> baseService)
         {
             _operationService = baseService;
-        }
-
-        [HttpGet("Id")]
-        public IActionResult GetId([FromBody] Guid Id)
-        {
-            var item = _operationService.GetByID(Id).Result;
-            if (item != null)
-            {
-                return Ok(item);
-            }
-            return BadRequest();
         }
         [HttpGet("GetAll")]
         public IActionResult GetAll()
@@ -38,19 +27,31 @@ namespace WebApi.Controllers
             }
             return BadRequest();
         }
-        [HttpPost("Create")] 
-        public IActionResult Create([FromBody] OperationTypeDto item)
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] OperationTypeDto item )
         {
-            if (item != null)
+            if (ModelState.IsValid)
             {
-                _operationService.Add(item);
+                await _operationService.Add(item);
                 return Ok("Successful add");
             }
             return BadRequest();
         }
+        [HttpGet("GetID/{Id}")]
+        public IActionResult GetId([FromRoute] Guid Id)
+        {
+            var item = _operationService.GetByID(Id).Result;
+            if (item != null)
+            {
+                return Ok(item);
+            }
+            return BadRequest();
+        }
+        
+        
 
-        [HttpDelete("Delete")]
-        public IActionResult Delete([FromBody] Guid Id)
+        [HttpDelete("Delete/{Id}")]
+        public IActionResult Delete([FromRoute] Guid Id)
         {
             var item = _operationService.GetByID(Id).Result;
             if (item != null) 
@@ -60,10 +61,14 @@ namespace WebApi.Controllers
             }
             return BadRequest("Don`t remove");
         }
-        [HttpPut("Update")]
+        [HttpPut("Update/{Id}")]
         public IActionResult Update([FromRoute] Guid Id, [FromBody] OperationTypeDto operation)
         {
-           
+            if (ModelState.IsValid)
+            {
+                _operationService.Update(operation, Id);
+                return Ok(_operationService.GetByID(Id));
+            }
             return BadRequest();
         }
         

@@ -55,13 +55,14 @@ namespace DAL.Infastructure
         public void RemoveEntity(Entity entity)
         {
             _dbContext.Set<Entity>().Remove(entity);
-            _dbContext .SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
         public void Update(Entity entity)
         {
+            
             _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
         
     }
