@@ -18,9 +18,9 @@ namespace WebApi.Controllers
             _transactionService = transactionService;
         }
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var list = _transactionService.GetAll().Result;
+            var list = await _transactionService.GetAll();
             if (list != null)
             {
                 return Ok(list);
@@ -39,9 +39,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var item = _transactionService.GetByID(id).Result;
+            var item = await _transactionService.GetByID(id);
             if (item != null)
             {
                 return Ok(item);
@@ -51,12 +51,13 @@ namespace WebApi.Controllers
 
 
         [HttpPut("{Id:guid}")]
-        public IActionResult Update([FromRoute] Guid Id, [FromBody] TransactionDto dto )
+        public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] TransactionDto dto )
         {
             if (ModelState.IsValid)
             {
                 _transactionService.Update(dto , Id);
-                return Ok(_transactionService.GetByID(Id).Result);
+                var result = await _transactionService.GetByID(Id);
+                return Ok(result);
             }
             return BadRequest();
 
@@ -65,7 +66,7 @@ namespace WebApi.Controllers
         [HttpDelete("{Id:guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
         {
-            var item = _transactionService.GetByID(Id).Result;
+            var item = await _transactionService.GetByID(Id);
             if (item != null)
             {
                 await _transactionService.Delete(Id);

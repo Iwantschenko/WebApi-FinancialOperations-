@@ -18,9 +18,9 @@ namespace WebApi.Controllers
             _operationService = baseService;
         }
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task< IActionResult> GetAll()
         {
-            var item = _operationService.GetAll().Result;
+            var item = await _operationService.GetAll();
             if (item != null)
             {
                 return Ok(item);
@@ -38,9 +38,9 @@ namespace WebApi.Controllers
             return BadRequest();
         }
         [HttpGet("GetID/{Id}")]
-        public IActionResult GetId([FromRoute] Guid Id)
+        public async Task<IActionResult> GetId([FromRoute] Guid Id)
         {
-            var item = _operationService.GetByID(Id).Result;
+            var item = await _operationService.GetByID(Id);
             if (item != null)
             {
                 return Ok(item);
@@ -48,12 +48,10 @@ namespace WebApi.Controllers
             return BadRequest();
         }
         
-        
-
         [HttpDelete("Delete/{Id}")]
-        public IActionResult Delete([FromRoute] Guid Id)
+        public async Task<IActionResult> Delete([FromRoute] Guid Id)
         {
-            var item = _operationService.GetByID(Id).Result;
+            var item = await _operationService.GetByID(Id);
             if (item != null) 
             {
                 _operationService.RemoveEntity(item);

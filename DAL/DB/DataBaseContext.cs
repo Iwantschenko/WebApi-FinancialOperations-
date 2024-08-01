@@ -12,7 +12,10 @@ namespace DAL.DB
         public DbSet<TransactionsEntity> transactions { get; set; }
         public DataBaseContext(DbContextOptions<DataBaseContext> options ):base(options) 
         {
-            Database.Migrate();
+            if (Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                Database.Migrate();
+            }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

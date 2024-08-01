@@ -12,6 +12,7 @@ namespace BLL.Service
         private readonly BaseService<TransactionsEntity , TransactionDto> _transactionService;
         private readonly BaseService<OperationTypeEntity , OperationTypeDto> _operationService;
         private readonly ReportRepository _reportRepository;
+       
         public ReportService(ReportRepository reportRepository , BaseService<TransactionsEntity,TransactionDto> transaction , BaseService<OperationTypeEntity ,OperationTypeDto> opeartion)
         {
             _reportRepository = reportRepository;
