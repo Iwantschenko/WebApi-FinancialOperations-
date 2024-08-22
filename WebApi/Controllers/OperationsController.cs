@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         {
             _operationService = baseService;
         }
-        [HttpGet("GetAll")]
+        [HttpGet]
         public async Task< IActionResult> GetAll()
         {
             var item = await _operationService.GetAll();
@@ -27,17 +27,17 @@ namespace WebApi.Controllers
             }
             return BadRequest();
         }
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] OperationTypeDto item )
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _operationService.Add(item);
-                return Ok("Successful add");
+                return BadRequest();
             }
-            return BadRequest();
+            await _operationService.Add(item);
+            return Ok("Successful add");
         }
-        [HttpGet("GetID/{Id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetId([FromRoute] Guid Id)
         {
             var item = await _operationService.GetByID(Id);
@@ -48,7 +48,7 @@ namespace WebApi.Controllers
             return BadRequest();
         }
         
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid Id)
         {
             var item = await _operationService.GetByID(Id);
@@ -59,7 +59,7 @@ namespace WebApi.Controllers
             }
             return BadRequest("Don`t remove");
         }
-        [HttpPut("Update/{Id}")]
+        [HttpPut("{Id}")]
         public IActionResult Update([FromRoute] Guid Id, [FromBody] OperationTypeDto operation)
         {
             if (ModelState.IsValid)

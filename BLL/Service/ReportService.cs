@@ -4,83 +4,70 @@ using DAL.Infastructure;
 using System.Runtime.CompilerServices;
 using Microsoft.Identity.Client;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Models.Models;
 
 namespace BLL.Service
 {
-    public  class ReportService 
+    public class ReportService
     {
-        private readonly BaseService<TransactionsEntity , TransactionDto> _transactionService;
-        private readonly BaseService<OperationTypeEntity , OperationTypeDto> _operationService;
+        private readonly BaseService<TransactionsEntity, TransactionDto> _transactionService;
+        private readonly BaseService<OperationTypeEntity, OperationTypeDto> _operationService;
         private readonly ReportRepository _reportRepository;
-       
-        public ReportService(ReportRepository reportRepository , BaseService<TransactionsEntity,TransactionDto> transaction , BaseService<OperationTypeEntity ,OperationTypeDto> opeartion)
+
+        public ReportService(ReportRepository reportRepository, BaseService<TransactionsEntity, TransactionDto> transaction, BaseService<OperationTypeEntity, OperationTypeDto> operation)
         {
             _reportRepository = reportRepository;
             _transactionService = transaction;
-            _operationService = opeartion;
+            _operationService = operation;
+        }
 
-        }
-        public TransactionReportDto GetByDate(DateTime date)
+        public async Task<TransactionReportDto?> GetByDateAsync(DateTime date)
         {
-            var transactions = _reportRepository.GetByDate(date).Result;
-            if (transactions != null)
+            var transactions = await _reportRepository.GetByDate(date);
+            if (transactions != null && transactions.Count != 0)
             {
-                return GetTransactionDbo(transactions);
+                return GetTransactionDboAsync(transactions);
             }
-            else 
-                return GetNullTransactionDbo();
+            return null;
         }
-        public TransactionReportDto GetbyDateRange(DateTime start , DateTime end)
+
+        public async Task<TransactionReportDto?> GetByDateRangeAsync(DateTime start, DateTime end)
         {
-            var transactions = _reportRepository.GetRangeDate(start , end).Result;
-            if (transactions != null)
+            var transactions = await _reportRepository.GetRangeDate(start, end);
+            if (transactions != null && transactions.Count != 0)
             {
-                return GetTransactionDbo(transactions);
+                return  GetTransactionDboAsync(transactions);
             }
-            else
-                return GetNullTransactionDbo();
+            return null;
         }
-        private TransactionReportDto GetTransactionDbo(List<TransactionsEntity> transactions) 
+
+        private TransactionReportDto GetTransactionDboAsync(List<TransactionsEntity> transactions)
         {
-                var totalValue = TotalIncomeAndExpense(transactions);
-                return new TransactionReportDto()
-                {
-                    Income = totalValue[0] , 
-                    Expenses = totalValue[1] ,
-                    Transactions = transactions
-                };
-        }
-        private TransactionReportDto GetNullTransactionDbo()
-        {
+            var amount = TotalIncomeAndExpenseAsync(transactions);
             return new TransactionReportDto()
             {
-                Income = 0,
-                Expenses = 0,
-                Transactions = new List<TransactionsEntity>()
+                Income = amount.totalIncome ,
+                Expenses = amount.totalExpance,
+                Transactions = transactions
             };
         }
-        private  List<decimal> TotalIncomeAndExpense(List<TransactionsEntity> transactions )
+
+        private TotalAmount TotalIncomeAndExpenseAsync(List<TransactionsEntity> transactions)
         {
-            decimal totalIncome = 0;
-            decimal totalExpense = 0;
+            TotalAmount amount = new TotalAmount();
             foreach (var item in transactions)
             {
-                if (_operationService.GetByID(item.OperationTypeID).Result.IsIncome)
+                if (item.OperationType.IsIncome)
                 {
-                    totalIncome += item.Amount;
-                    
+                    amount.totalIncome += item.Amount;
                 }
                 else
                 {
-                    totalExpense += item.Amount;
+                    amount.totalExpance += item.Amount;
                 }
-                    
             }
-            return new List<decimal>() 
-            {
-                totalIncome,
-                totalExpense
-            };
+            return amount;
         }
     }
+    
 }

@@ -15,22 +15,26 @@ namespace WebApi.Controllers
         {
             _reportService = reportService;
         }
+
         [HttpGet("{date}")]
-        public IActionResult GetByDate([FromRoute] DateTime date)
+        public async Task<IActionResult> GetByDate([FromRoute] DateTime date)
         {
-            if (ModelState.IsValid)
+            var item = await _reportService.GetByDateAsync(date);
+            if (item != null)
             {
-                return Ok(_reportService.GetByDate(date));
+                return Ok(item);
             }
             return BadRequest();
         }
-        [HttpGet]
-        public IActionResult GetRangeDate([FromQuery] DateTime startDate , [FromQuery] DateTime endDate)
+
+        [HttpGet("{startDate}/{endDate}")]
+        public async Task<IActionResult> GetRangeDate([FromRoute] DateTime startDate , [FromRoute] DateTime endDate)
         {
-            if (ModelState.IsValid)
+            var item = await _reportService.GetByDateRangeAsync(startDate, endDate);
+            if (item != null)
             {
-                return Ok(_reportService.GetbyDateRange(startDate , endDate));
-            }
+                return Ok(item);
+            }             
             return BadRequest();
         }
     }

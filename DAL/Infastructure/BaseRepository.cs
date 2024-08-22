@@ -1,4 +1,5 @@
 ﻿using DAL.DB;
+using Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,57 +9,65 @@ using System.Threading.Tasks;
 
 namespace DAL.Infastructure
 {
-    public  class BaseRepository<Entity> : IRepository<Entity> where Entity : class
+    public  class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DataBaseContext _dbContext;
         public BaseRepository(DataBaseContext dbContext) 
         {
             _dbContext = dbContext;
         }
-        public async Task Add(Entity entity)
+        public async Task Add(TEntity entity)
         {
-            await _dbContext.Set<Entity>().AddAsync(entity);
+            await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task AddRange(IEnumerable<Entity> entities)
+        public async Task AddRange(IEnumerable<TEntity> entities)
         {
-            await _dbContext.Set<Entity>().AddRangeAsync(entities);
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(Guid ID)
         {
-            var item = await _dbContext.Set<Entity>().FindAsync(ID);
+            var item = await _dbContext.Set<TEntity>().FindAsync(ID);
             if (item != null) 
             {
-                _dbContext.Set<Entity>().Remove(item);
+                _dbContext.Set<TEntity>().Remove(item);
             }
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Entity>> GetAll()
+        public async Task<List<TEntity>> GetAll()
         {
-            return await _dbContext
-                .Set<Entity>()
-                .AsNoTracking()
-                .ToListAsync();
+            //return await _dbContext
+            //    .Set<TEntity>()
+            //    .AsNoTracking()
+            //    .ToListAsync();
+            var query = _dbContext.Set<TEntity>().AsNoTracking().AsQueryable();
+
+            if (typeof(TEntity) == typeof(TransactionsEntity))
+            {
+                query = query.Include("OperationType");
+            }
+
+            return await query.ToListAsync();
         }
 
-        public async Task<Entity> GetByID(Guid ID)
+        public async Task<TEntity> GetByID(Guid ID)
         {
             return  await _dbContext
-               .Set<Entity>()
+               .Set<TEntity>()
                .FindAsync(ID);
         }
 
-        public void RemoveEntity(Entity entity)
+        public void RemoveEntity(TEntity entity)
         {
-            _dbContext.Set<Entity>().Remove(entity);
+            _dbContext.Set<TEntity>().Remove(entity);
             _dbContext.SaveChanges();
         }
 
-        public void Update(Entity entity)
+        public void Update(TEntity entity)
         {
             
             _dbContext.Entry(entity).State = EntityState.Modified;

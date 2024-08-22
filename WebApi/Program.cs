@@ -15,7 +15,7 @@ namespace WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
-            // Add services to the container.
+            
             #region DI 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -35,22 +35,31 @@ namespace WebApi
             builder.Services.AddScoped<BaseService<OperationTypeEntity , OperationTypeDto>>();
             builder.Services.AddScoped<BaseService<TransactionsEntity , TransactionDto>>();
             builder.Services.AddScoped<ReportService>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("BlazorClient" , builder =>
+                {
+                    builder.WithOrigins("https://localhost:7063")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
             #endregion
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                
             }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseCors("BlazorClient");
 
             app.MapControllers();
 

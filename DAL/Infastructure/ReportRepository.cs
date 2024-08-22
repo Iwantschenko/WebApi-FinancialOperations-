@@ -15,7 +15,8 @@ namespace DAL.Infastructure
         {
             return await _dbContext.transactions
                 .AsNoTracking()
-                .Where(tr => tr.DateTime.Date  == findDate.Date)
+                .Where(tr => tr.DateTime.Date == findDate.Date)
+                .Include(t => t.OperationType)              
                 .ToListAsync() ;
         }
         public async Task<List<TransactionsEntity>> GetRangeDate(DateTime startDate , DateTime endDate)
@@ -23,6 +24,7 @@ namespace DAL.Infastructure
             return await _dbContext.transactions
                 .AsNoTracking() 
                 .Where(t => t.DateTime.Date >= startDate.Date && t.DateTime.Date <= endDate.Date)
+                .Include(t => t.OperationType)
                 .ToListAsync();
         }
     }

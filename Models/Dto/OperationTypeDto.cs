@@ -10,7 +10,7 @@ namespace Models.Dto
     public class OperationTypeDto
     {
         [Required]
-        [MinLength(5 , ErrorMessage ="MinLength 5")]
+        [MinLength(1 , ErrorMessage ="MinLength 1")]
         public string Name { get; set; }
         public bool IsIncome { get; set; }
     }
