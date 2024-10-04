@@ -24,9 +24,9 @@ namespace DAL.DB
 
             base.OnModelCreating(modelBuilder);
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
+            base.ConfigureConventions(configurationBuilder); 
         }
     }
 }

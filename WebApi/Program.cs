@@ -36,15 +36,15 @@ namespace WebApi
             builder.Services.AddScoped<BaseService<TransactionsEntity , TransactionDto>>();
             builder.Services.AddScoped<ReportService>();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("BlazorClient" , builder =>
-                {
-                    builder.WithOrigins("https://localhost:7063")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                });
-            });
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("BlazorClient" , builder =>
+            //    {
+            //        builder.WithOrigins("https://localhost:7063")
+            //               .AllowAnyMethod()
+            //               .AllowAnyHeader();
+            //    });
+            //});
             #endregion
 
             var app = builder.Build();
@@ -58,8 +58,8 @@ namespace WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-            app.UseCors("BlazorClient");
+            //app.UseAuthorization();
+            //app.UseCors("BlazorClient");
 
             app.MapControllers();
 
